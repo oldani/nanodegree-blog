@@ -1,12 +1,12 @@
 
 class Base():
     """ Base configurations goes here. """
-    pass
+    DEBUG = False
 
 
 class Development(Base):
     """ Here goes configuations values for development. """
-    pass
+    DEBUG = True
 
 
 class Production(Base):
