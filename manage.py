@@ -1,5 +1,5 @@
 from decouple import config
-from flask_escript import Manager, Shell, Server
+from flask_script import Manager, Shell, Server
 from app.app import create_app
 from app.settings import Development, Production
 
