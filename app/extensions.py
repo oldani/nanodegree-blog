@@ -42,7 +42,7 @@ class Db:
     # Updates and insert are almost the same
     update = put
 
-    def delete(self, id, kind):
+    def delete(self, kind, id):
         """ Delete an Entity from Datastore. """
         db = self.client
         key = db.key(kind, int(id))
