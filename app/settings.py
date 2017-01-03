@@ -1,7 +1,10 @@
+from decouple import config
+
 
 class Base():
     """ Base configurations goes here. """
     DEBUG = False
+    PROJECT_ID = config("PROJECT_ID")
 
 
 class Development(Base):

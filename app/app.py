@@ -1,4 +1,5 @@
 from flask import Flask
+from .extensions import db
 from . import views
 
 
@@ -19,8 +20,7 @@ def create_app(config):
 
 def register_extensions(app):
     """ Register all extensions with the app. """
-
-    pass
+    db.init_app(app)
 
 
 def register_views(app):

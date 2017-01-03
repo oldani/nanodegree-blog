@@ -12,6 +12,9 @@ Flask-Classy==0.6.10
 #Server
 gunicorn
 
+#Database
+google-cloud==0.22.0
+
 #Tools
 python-decouple==3.0
 Flask-Script==2.0.5
