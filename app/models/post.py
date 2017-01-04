@@ -15,7 +15,7 @@ class Post(object):
     def put(self, data=None, id=None):
         if data:
             return self.db.put(self.kind, data)
-        return self.db.put(self.kind, self.data)
+        self.id, _ = self.db.put(self.kind, self.data)
 
     update = put
 
