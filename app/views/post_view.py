@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from flask_classy import FlaskView, route
-from ..models.post import Post as PostModel
+from ..models import PostModel
 
 
 class Post(FlaskView):
