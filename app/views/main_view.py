@@ -1,5 +1,6 @@
 from flask import render_template
 from flask_classy import FlaskView
+from ..models import PostModel
 
 
 class Main(FlaskView):
@@ -8,4 +9,6 @@ class Main(FlaskView):
     route_base = "/"
 
     def index(self):
-        return render_template("base.html")
+        posts = PostModel()
+        posts = posts.fetch()
+        return render_template("index.html", posts=posts)
