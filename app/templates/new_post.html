@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post" action="{{url_for('Post:new')}}">
+        <input type="text" name="title" value="{{ post.title if post else '' }}" placeholder="Title">
+        <br>
+        <textarea rows="8" name="body" placeholder="Here your Post content">
+            {{ post.body if post else "" }}
+        </textarea>
+        <br>
+        <input type="submit" name="Create">
+    </form>
+{% endblock %}
