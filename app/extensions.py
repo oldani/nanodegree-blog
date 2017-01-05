@@ -24,16 +24,16 @@ class Db:
         entity['id'] = entity.key.id
         return entity
 
-    def get(self, kind, id):
+    def get(self, kind, entity_id):
         """ Returns a single entity form Datastore. """
         db = self.client
-        key = db.key(kind, int(id))
+        key = db.key(kind, int(entity_id))
         return self.from_datastore(db.get(key))
 
-    def put(self, kind, data, id=None):
+    def put(self, kind, data, entity_id=None):
         """ Create an Entity or update """
         db = self.client
-        key = db.key(kind, int(id)) if id else db.key(kind)
+        key = db.key(kind, int(entity_id)) if entity_id else db.key(kind)
         entity = datastore.Entity(key=key)
         entity.update(data)
         db.put(entity)
@@ -42,10 +42,10 @@ class Db:
     # Updates and insert are almost the same
     update = put
 
-    def delete(self, kind, id):
+    def delete(self, kind, entity_id):
         """ Delete an Entity from Datastore. """
         db = self.client
-        key = db.key(kind, int(id))
+        key = db.key(kind, int(entity_id))
         db.delete(key)
 
 db = Db()

@@ -7,9 +7,9 @@ from ..forms import PostForm
 class Post(FlaskView):
     """ Here will handle post creations, delete and update."""
 
-    def get(self, id):
+    def get(self, entity_id):
         post = PostModel()
-        post = post.get(id)
+        post = post.get(entity_id)
         return render_template("post.html", post=post)
 
     @route("/new/", methods=["GET", "POST"])
@@ -18,8 +18,8 @@ class Post(FlaskView):
         if form.validate_on_submit():
             post = PostModel(**form.data)
             post.put()
-            return redirect(url_for("Post:get", id=post.id))
-        return render_template("new_post.html", form=form)
+            return redirect(url_for("Post:get", entity_id=post.id))
+        return render_template("new_post.html", form=form, url="Post:new")
 
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
@@ -28,6 +28,6 @@ class Post(FlaskView):
         form = PostForm(**entity)
         if form.validate_on_submit():
             post.update(entity_id, form.data)
-            return redirect(url_for("Post:get", id=entity_id))
-        return render_template("new_post.html", form=form, edit=True,
+            return redirect(url_for("Post:get", entity_id=entity_id))
+        return render_template("edit_post.html", form=form, url="Post:edit",
                                entity_id=entity_id)

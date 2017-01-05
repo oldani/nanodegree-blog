@@ -1,12 +1,6 @@
 {% extends "base.html" %}
-{% from "macros/form_field.html" import form_field %}
+{% from "macros/form.html" import form as macro_form %}
 
 {% block content %}
-    <form method="post" action="{{url_for('Post:edit', entity_id=entity_id if edit else 'Post:new')}}">
-        {{form.csrf_token}}
-        {% for field in form if not field.current_token %}
-            {{ form_field(field) }}
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Post</button>
-    </form>
+    {{ macro_form(url, form) }}
 {% endblock %}

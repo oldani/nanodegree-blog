@@ -4,7 +4,7 @@
     {% for post in posts %}
         <div>
             <h3>{{post.title}}
-            <a href="{{ url_for('Post:get', id=post.id) }}">click here</a>
+            <a href="{{ url_for('Post:get', entity_id=post.id) }}">click here</a>
             </h3>
             <p>{{post.body}}</p>
         </div>
