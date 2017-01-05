@@ -1,13 +1,12 @@
 {% extends "base.html" %}
+{% from "macros/form_field.html" import form_field %}
 
 {% block content %}
-    <form method="post" action="{{url_for('Post:new')}}">
-        <input type="text" name="title" value="{{ post.title if post else '' }}" placeholder="Title">
-        <br>
-        <textarea rows="8" name="body" placeholder="Here your Post content">
-            {{ post.body if post else "" }}
-        </textarea>
-        <br>
-        <input type="submit" name="Create">
+    <form method="post" action="{{url_for('Post:edit', entity_id=entity_id if edit else 'Post:new')}}">
+        {{form.csrf_token}}
+        {% for field in form if not field.current_token %}
+            {{ form_field(field) }}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Post</button>
     </form>
 {% endblock %}

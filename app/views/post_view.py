@@ -1,10 +1,11 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, redirect, url_for
 from flask_classy import FlaskView, route
 from ..models import PostModel
+from ..forms import PostForm
 
 
 class Post(FlaskView):
-    """Here will handle post creations, delete and update."""
+    """ Here will handle post creations, delete and update."""
 
     def get(self, id):
         post = PostModel()
@@ -13,14 +14,20 @@ class Post(FlaskView):
 
     @route("/new/", methods=["GET", "POST"])
     def new(self):
-        if request.method == "POST":
-            post = request.form.to_dict(flat=True)
-            post = PostModel(**post)
+        form = PostForm()
+        if form.validate_on_submit():
+            post = PostModel(**form.data)
             post.put()
             return redirect(url_for("Post:get", id=post.id))
-        return render_template("new_post.html")
+        return render_template("new_post.html", form=form)
 
-    def edit(self, id):
+    @route("/edit/<entity_id>", methods=["GET", "POST"])
+    def edit(self, entity_id):
         post = PostModel()
-        post = post.get(id)
-        return render_template("new_post.html", post=post)
+        entity = post.get(entity_id)
+        form = PostForm(**entity)
+        if form.validate_on_submit():
+            post.update(entity_id, form.data)
+            return redirect(url_for("Post:get", id=entity_id))
+        return render_template("new_post.html", form=form, edit=True,
+                               entity_id=entity_id)
