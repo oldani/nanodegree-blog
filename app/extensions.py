@@ -1,5 +1,7 @@
 """ Here goes all the extensions and configs options. """
 from google.cloud import datastore
+from flask_mail import Mail
+from flask_debugtoolbar import DebugToolbarExtension
 
 
 class Db:
@@ -26,12 +28,14 @@ class Db:
 
     def get(self, kind, entity_id):
         """ Returns a single entity form Datastore. """
+
         db = self.client
         key = db.key(kind, int(entity_id))
         return self.from_datastore(db.get(key))
 
     def put(self, kind, data, entity_id=None):
         """ Create an Entity or update """
+
         db = self.client
         key = db.key(kind, int(entity_id)) if entity_id else db.key(kind)
         entity = datastore.Entity(key=key)
@@ -44,8 +48,17 @@ class Db:
 
     def delete(self, kind, entity_id):
         """ Delete an Entity from Datastore. """
+
         db = self.client
         key = db.key(kind, int(entity_id))
         db.delete(key)
 
+
+# GClound DataStore wrapper
 db = Db()
+
+# Flask Mail
+mail = Mail()
+
+# Flask Debug
+toolbar = DebugToolbarExtension()
