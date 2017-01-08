@@ -19,7 +19,8 @@ class Post(FlaskView):
             post = PostModel(**form.data)
             post.put()
             return redirect(url_for("Post:get", entity_id=post.id))
-        return render_template("post/new_post.html", form=form, url="Post:new")
+        return render_template("post/post_form.html", form=form,
+                               url="Post:new")
 
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
@@ -29,5 +30,5 @@ class Post(FlaskView):
         if form.validate_on_submit():
             post.update(entity_id, form.data)
             return redirect(url_for("Post:get", entity_id=entity_id))
-        return render_template("post/edit_post.html", form=form, url="Post:edit",
-                               entity_id=entity_id)
+        return render_template("post/post_form.html", form=form,
+                               url="Post:edit", entity_id=entity_id)
