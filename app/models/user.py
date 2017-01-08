@@ -13,6 +13,7 @@ class User(BaseModel):
         self.username = self.data.get("username")
         self.email = self.data.get("email")
         self.password = self.data.get("password")
+        self.posts_list = self.data.get("posts_list")
 
     def get_id(self):
         """ Retrieve an Entity ID attribute if set or from data dict. """
@@ -43,3 +44,13 @@ class User(BaseModel):
     def is_authenticated(self):
         """ User by Flask Login to check if and user is authenticated. """
         return True
+
+    def add_post(self, post_id):
+        if not self.posts_list:
+            self.posts_list = self.data["posts_list"] = []
+        self.posts_list.append(post_id)
+        self.update()
+
+    def update(self):
+        """ Extends update method from BaseModel. """
+        super().update(self.get_id(), self.data)
