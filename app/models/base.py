@@ -14,6 +14,9 @@ class BaseModel:
         self.id = entity_id
         return self.db.get(self.kind, entity_id)
 
+    def get_multi(self, entities_keys):
+        return self.db.get_multi(self.kind, entities_keys)
+
     def put(self, entity_id=None, data=None):
         """ If data and id are pass means a update. """
         if data and entity_id:
