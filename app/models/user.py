@@ -2,6 +2,7 @@ from .base import BaseModel
 
 
 class User(BaseModel):
+    """ User's model. """
     username = None
     email = None
     password = None
@@ -14,23 +15,31 @@ class User(BaseModel):
         self.password = self.data.get("password")
 
     def get_id(self):
+        """ Retrieve an Entity ID attribute if set or from data dict. """
         try:
             return self.id
         except AttributeError:
             return self.data.get("id")
 
     def set_active(self, active):
+        """ Set an User as activated when confirm email,
+            to be use by Flask User. """
         self.data["is_active"] = active
         if self.confirmed_at:
+            # Flask User set and comfirmed_at atttribute when email
+            # is confirmed, if done add to data dict
             self.data["confirmed_at"] = self.confirmed_at
         self.update(self.data.get("id"), self.data)
 
     def has_confirmed_email(self):
+        """ Use by Flask User to check if an user has validate his email. """
         return self.data.get("confirmed_at")
 
     def is_active(self):
+        """ Use by Flask User to check if and user account is active."""
         return self.data.get("is_active")
 
     @property
     def is_authenticated(self):
+        """ User by Flask Login to check if and user is authenticated. """
         return True
