@@ -1,6 +1,8 @@
 from flask import Flask
-from .extensions import db
+from flask_user import UserManager
 from . import views
+from .extensions import db, mail, toolbar
+from .models import DataStoreAdapter, UserModel
 
 
 def create_app(config):
@@ -11,16 +13,19 @@ def create_app(config):
     register_extensions(app)
     register_views(app)
 
-    # @app.route("/")
-    # def index():
-    #     return "Hello World!"
-
     return app
 
 
 def register_extensions(app):
     """ Register all extensions with the app. """
     db.init_app(app)
+    mail.init_app(app)
+    toolbar.init_app(app)
+
+    # Cannot put it in extension files
+    # due to will create a circular import.
+    db_adapter = DataStoreAdapter(db, UserModel)
+    user_manager = UserManager(db_adapter, app)
 
 
 def register_views(app):
