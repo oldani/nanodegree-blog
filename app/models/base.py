@@ -11,6 +11,7 @@ class BaseModel:
         self.data = kwargs
 
     def get(self, entity_id):
+        self.id = entity_id
         return self.db.get(self.kind, entity_id)
 
     def put(self, entity_id=None, data=None):
@@ -21,9 +22,9 @@ class BaseModel:
 
     update = put
 
-    def fetch(self):
+    def fetch(self, **kwargs):
         """ Execute lazy query, map results and convert obj to a list. """
-        entities = map(self.db.from_datastore, self.query.fetch())
+        entities = map(self.db.from_datastore, self.query.fetch(**kwargs))
         return list(entities)
 
     def delete(self, entity_id):

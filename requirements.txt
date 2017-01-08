@@ -8,6 +8,10 @@ Werkzeug==0.11.13
 
 #Flask Extensions
 Flask-Classy==0.6.10
+Flask-WTF==0.13.1
+Flask-Mail==0.9.1
+Flask-User==0.6.11
+Flask-DebugToolbar==0.10.0
 
 #Server
 gunicorn
@@ -18,4 +22,3 @@ google-cloud==0.22.0
 #Tools
 python-decouple==3.0
 Flask-Script==2.0.5
-Flask-WTF==0.13.1
