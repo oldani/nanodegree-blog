@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for
 from flask_classy import FlaskView, route
+from flask_user import login_required
 from ..models import PostModel
 from ..forms import PostForm
 
@@ -12,6 +13,7 @@ class Post(FlaskView):
         post = post.get(entity_id)
         return render_template("post/post.html", post=post)
 
+    @login_required
     @route("/new/", methods=["GET", "POST"])
     def new(self):
         form = PostForm()
@@ -22,6 +24,7 @@ class Post(FlaskView):
         return render_template("post/post_form.html", form=form,
                                url="Post:new")
 
+    @login_required
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
         post = PostModel()
