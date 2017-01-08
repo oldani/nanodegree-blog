@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, abort
 from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
 from ..models import PostModel
@@ -28,6 +28,8 @@ class Post(FlaskView):
     @login_required
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
+        if int(entity_id) not in current_user.posts_list:
+            abort(403)
         post = PostModel()
         entity = post.get(entity_id)
         form = PostForm(**entity)
