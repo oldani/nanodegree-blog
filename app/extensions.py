@@ -33,6 +33,14 @@ class Db:
         key = db.key(kind, int(entity_id))
         return self.from_datastore(db.get(key))
 
+    def get_multi(self, kind, entities_keys):
+        """ Returns a list of all the entity in the list if exists. """
+        db = self.client
+        entities_keys = [db.key(kind, int(key)) for key in entities_keys]
+        entities = db.get_multi(entities_keys)
+        entities = map(self.from_datastore, entities)
+        return list(entities)
+
     def put(self, kind, data, entity_id=None):
         """ Create an Entity or update """
 
