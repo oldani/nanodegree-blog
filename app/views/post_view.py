@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for
 from flask_classy import FlaskView, route
-from flask_user import login_required
+from flask_user import login_required, current_user
 from ..models import PostModel
 from ..forms import PostForm
 
@@ -18,8 +18,9 @@ class Post(FlaskView):
     def new(self):
         form = PostForm()
         if form.validate_on_submit():
-            post = PostModel(**form.data)
+            post = PostModel(user=current_user.username, **form.data)
             post.put()
+            current_user.add_post(post.id)
             return redirect(url_for("Post:get", entity_id=post.id))
         return render_template("post/post_form.html", form=form,
                                url="Post:new")
