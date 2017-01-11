@@ -46,6 +46,8 @@ class User(BaseModel):
         return True
 
     def add_post(self, post_id):
+        """ Add a post id to the user posts list or create it if not
+            exits as a one to many relationship. """
         if not self.posts_list:
             self.posts_list = self.data["posts_list"] = []
         self.posts_list.append(post_id)
