@@ -32,3 +32,4 @@ def register_views(app):
     """ Register all views class. """
     views.Main.register(app)
     views.Post.register(app)
+    views.Comment.register(app)
