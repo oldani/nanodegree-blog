@@ -26,8 +26,15 @@
               <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('user.register')}}">Sign up</a>
             </li>
           {% else %}
-            <li class="nav-item">
-              <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('user.logout')}}">Logout</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                {{current_user.username}}
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{url_for('user.profile')}}">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{url_for('user.logout')}}">Logout</a>
+              </div>
             </li>
           {% endif %}
         </ul>
