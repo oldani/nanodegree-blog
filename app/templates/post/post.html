@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>{{post.title}}</h3>
-    <strong>{{post.user}}</strong>
-    <br>
-    <p>{{post.body}}</p>
+  <div class="row justify-content-center">
+    <div class="col col-md-8">
+      <h3>{{post.title}}</h3>
+      <strong>{{post.user}}</strong>
+      <p>{{post.body}}</p>
+    </div>
+  </div>
 {% endblock %}
