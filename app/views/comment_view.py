@@ -16,10 +16,10 @@ class Comment(FlaskView):
         return "comment.fetch()"
 
     @login_required
-    def post(self):
+    def post(self, post_id):
         form = CommentForm()
         if form.validate_on_submit():
-            post = PostModel().get(form.data['post_id'])
+            post = PostModel().get(post_id)
             post = PostModel(**post)
             comment = CommentModel(user=current_user.username, **form.data)
             comment.put()
