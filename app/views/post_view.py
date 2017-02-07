@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, abort
 from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
 from ..models import PostModel
-from ..forms import PostForm
+from ..forms import PostForm, CommentForm
 
 
 class Post(FlaskView):
@@ -11,7 +11,11 @@ class Post(FlaskView):
     def get(self, entity_id):
         post = PostModel()
         post = post.get(entity_id)
-        return render_template("post/post.html", post=post)
+        comment_form = None
+        if current_user.is_authenticated:
+            comment_form = CommentForm()
+        return render_template("post/post.html", post=post,
+                               comment_form=comment_form)
 
     @login_required
     @route("/new/", methods=["GET", "POST"])

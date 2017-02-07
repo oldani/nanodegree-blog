@@ -8,4 +8,13 @@
       <p>{{post.body}}</p>
     </div>
   </div>
+  <div class="row justify-content-center">
+    <div class="col col-md-8">
+      {% if comment_form %}
+        {% from "macros/form.html" import form as macro_form %}
+
+        {{ macro_form('Comment:post', form=comment_form, post_id=post.id) }}
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
