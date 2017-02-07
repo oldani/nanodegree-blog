@@ -30,7 +30,7 @@ class User(BaseModel):
             # Flask User set and comfirmed_at atttribute when email
             # is confirmed, if done add to data dict
             self.data["confirmed_at"] = self.confirmed_at
-        self.update(self.data.get("id"), self.data)
+        self.update()
 
     def has_confirmed_email(self):
         """ Use by Flask User to check if an user has validate his email. """
