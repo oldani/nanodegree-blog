@@ -1,3 +1,4 @@
+from flask import jsonify
 from flask_classy import FlaskView
 from flask_user import current_user, login_required
 from ..models import CommentModel, PostModel
@@ -12,8 +13,7 @@ class Comment(FlaskView):
     def all(self, post_id):
         comment = CommentModel()
         comment.query.add_filter('post_id', '=', int(post_id))
-        print(comment.fetch())
-        return "comment.fetch()"
+        return jsonify(comment.fetch())
 
     @login_required
     def post(self, post_id):
