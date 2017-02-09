@@ -21,8 +21,10 @@ class Comment(FlaskView):
         if form.validate_on_submit():
             post = PostModel().get(post_id)
             post = PostModel(**post)
-            comment = CommentModel(user=current_user.username, **form.data)
+            comment = CommentModel(user=current_user.username,
+                                   post_id=int(post_id),
+                                   **form.data)
             comment.put()
             post.add_comment(comment.id)
-            return "ALEYUYA"
+            return jsonify(comment.data)
         return "form.errors"
