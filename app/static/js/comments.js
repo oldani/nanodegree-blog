@@ -2,7 +2,7 @@ var model = {
   init: function(){
     var _self = this;
     var url = window.allCommentEndpoint || '';
-    $.getJSON(url, function(data) {
+    return $.getJSON(url).done(function(data) {
       _self.comments = data;
     });
   },
@@ -11,8 +11,9 @@ var model = {
 
 var controller = {
   init: function() {
-    model.init();
-    view.init();
+    model.init().then(function() {
+      view.init();
+    });
   },
   getComments: function(){
     return model.comments;
@@ -32,6 +33,6 @@ var view = {
       this.commentsContainer.append(commet)
     }.bind(this));
   }
-}
+};
 
 controller.init()
