@@ -10,7 +10,7 @@
   </div>
   <div class="row justify-content-center">
     <div class="col col-md-8">
-      <div class="jumbotron">
+      <div class="jumbotron comment-form">
         {% if comment_form %}
           {% from "macros/form.html" import form as macro_form %}
 
@@ -20,13 +20,14 @@
     </div>
   </div>
   <div class="row justify-content-center">
-    <div class="col col-md-6" id="comments">
+    <div class="col col-md-6 comments">
     </div>
   </div>
 {% endblock %}
 {% block scripts %}
   <script>
     window.allCommentEndpoint = "{{url_for('Comment:all', post_id=post.id)}}";
+    window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
   </script>
   <script src="{{url_for('static', filename='js/comments.js')}}" ></script>
 {% endblock %}
