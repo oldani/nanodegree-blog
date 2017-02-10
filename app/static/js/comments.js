@@ -27,6 +27,7 @@
 
   var commentsView = {
     init: function() {
+      this.currentUser = window.currentUser;
       this.$commentsContainer = $(".comments");
       this.commentsTemplate = commentsTemplate;
       this.comments = controller.getComments();
@@ -35,6 +36,7 @@
     render: function() {
       this.$commentsContainer.html('');
       _.each(this.comments, function(item, i) {
+        item.currentUser = this.currentUser;
         var comment = this.commentsTemplate(item);
         this.$commentsContainer.append(comment);
       }.bind(this));
