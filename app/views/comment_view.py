@@ -13,6 +13,7 @@ class Comment(FlaskView):
     def all(self, post_id):
         comment = CommentModel()
         comment.query.add_filter('post_id', '=', int(post_id))
+        comment.query.order = '-updated'
         return jsonify(comment.fetch())
 
     @login_required

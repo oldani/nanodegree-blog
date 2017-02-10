@@ -20,7 +20,7 @@
       return model.comments;
     },
     updateComments: function(comment) {
-      model.comments = model.comments.concat(comment);
+      model.comments = [comment].concat(model.comments);
       commentsView.reRender();
     }
   };
