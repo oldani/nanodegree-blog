@@ -24,10 +24,29 @@
     </div>
   </div>
 {% endblock %}
+
+{% block js_templates%}
+  <script type="text/template" class="comments-template">
+    <div class="card">
+      <div class="card-block">
+        <h5 class="card-title"><%= user %></h5>
+        <p class="card-text"><%= comment %></p>
+        <% if (user == currentUser) { %>
+          <a href="#" class="card-link">Edit</a>
+          <a href="#" class="card-link">Delete</a>
+        <% } %>
+      </div>
+    </div>
+  </script>
+{% endblock %}
+
 {% block scripts %}
   <script>
     window.allCommentEndpoint = "{{url_for('Comment:all', post_id=post.id)}}";
-    window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
+    {% if comment_form %}
+      window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
+      window.currentUser = "{{current_user.username}}";
+    {% endif %}
   </script>
   <script src="{{url_for('static', filename='js/comments.js')}}" ></script>
 {% endblock %}
