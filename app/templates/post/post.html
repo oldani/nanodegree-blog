@@ -33,7 +33,7 @@
         <p class="card-text"><%= comment %></p>
         <% if (user == currentUser) { %>
           <a href="#" class="card-link">Edit</a>
-          <a href="#" class="card-link">Delete</a>
+          <a href="<%= deleteUrl %>" class="card-link delete-comment">Delete</a>
         <% } %>
       </div>
     </div>
@@ -43,6 +43,7 @@
 {% block scripts %}
   <script>
     window.allCommentEndpoint = "{{url_for('Comment:all', post_id=post.id)}}";
+    window.commentDeleteEndpoint = "{{url_for('Comment:delete', comment_id='')}}";
     {% if comment_form %}
       window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
       window.currentUser = "{{current_user.username}}";
