@@ -5,41 +5,37 @@ class User(BaseModel):
     """ User's model. """
     username = None
     email = None
-    password = None
-
-    def __init__(self, **kwargs):
-        self.kind = "User"
-        super().__init__(self.kind, **kwargs)
-        self.username = self.data.get("username")
-        self.email = self.data.get("email")
-        self.password = self.data.get("password")
 
     def get_id(self):
-        """ Retrieve an Entity ID attribute if set or from data dict. """
+        """ Retrieve an Entity ID attribute, necessary for Flask User. """
         try:
             return self.id
         except AttributeError:
-            return self.data.get("id")
+            return None
 
     def set_active(self, active):
-        """ Set an User as activated when confirm email,
+        """ Set an User as activated when email have been confirmend,
             to be use by Flask User. """
-        self.data["is_active"] = active
-        if self.confirmed_at:
-            # Flask User set and comfirmed_at atttribute when email
-            # is confirmed, if done add to data dict
-            self.data["confirmed_at"] = self.confirmed_at
-        self.update(self.data.get("id"), self.data)
+        self.is_active = active
+        self.update()
 
     def has_confirmed_email(self):
         """ Use by Flask User to check if an user has validate his email. """
-        return self.data.get("confirmed_at")
+        return self.confirmed_at
 
     def is_active(self):
         """ Use by Flask User to check if and user account is active."""
-        return self.data.get("is_active")
+        return self.is_active
 
     @property
     def is_authenticated(self):
         """ User by Flask Login to check if and user is authenticated. """
         return True
+
+    def add_post(self, post_id):
+        """ Add a post id to the user posts list or create it if not
+            exits. """
+        if not hasattr(self, 'post_list'):
+            self.posts_list = []
+        self.posts_list.append(post_id)
+        self.update()

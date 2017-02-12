@@ -5,11 +5,56 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OLDA BLOg</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <h1>Hello World</h1>
+  <header class="container-fluid">
+    <nav class="navbar fixed-top navbar-toggleable-sm navbar-light bg-faded">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="/">Nanodegree-blog</a>
+      <div class="collapse navbar-collapse justify-content-between" id="navbar">
+        <a class="nav-link" href="/">Home</a>
+        <ul class="nav navbar-nav">
+          {% if not current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('user.login')}}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-outline-success my-2 my-sm-0" href="{{url_for('user.register')}}">Sign up</a>
+            </li>
+          {% else %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                {{current_user.username}}
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{url_for('user.profile')}}">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{url_for('user.logout')}}">Logout</a>
+              </div>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
     {% block content %}
     {% endblock %}
+  </main>
+  <footer>
+    
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="{{url_for('static', filename='js/underscore.min.js')}}"></script>
+  {% block js_templates %}{% endblock %}
+  <script src="{{url_for('static', filename='js/helpers.js')}}"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -9,6 +9,5 @@ class Main(FlaskView):
     route_base = "/"
 
     def index(self):
-        posts = PostModel()
-        posts = posts.fetch()
+        posts = PostModel.fetch()
         return render_template("index.html", posts=posts)

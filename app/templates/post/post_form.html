@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "macros/form.html" import form as macro_form %}
+
+{% block content %}
+    {% if entity_id %}
+        {{ macro_form(url, form, entity_id=entity_id) }}
+    {% else %}
+        {{ macro_form(url, form) }}
+    {% endif %}
+{% endblock %}
