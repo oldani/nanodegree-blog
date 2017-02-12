@@ -83,10 +83,24 @@
 
   var formView = {
     init: function(){
-      var postEnpoint = window.commentPostEnpoint || '';
-      var form = $(".comment-form form");
+      this.postEnpoint = window.commentPostEnpoint || '';
+      this.$form = $(".comment-form form");
+      this.$errorTemplate = errorTemplate;
 
-      form.submit(function(e) {
+      this.handleForm();
+    },
+    renderErrors: function($form, errors) {
+      _.each(errors, function(error, i) {
+        var errorObj = {error:error};
+        var renderedError = this.$errorTemplate(errorObj);
+
+        $form. append(renderedError);
+      }.bind(this))
+    },
+    handleForm: function(){
+      var _self = this;
+
+      this.$form.submit(function(e) {
         e.preventDefault();
 
         var $this, data;
@@ -94,9 +108,17 @@
         $this = $(this);
         data = $this.serializeArray();
 
-        $.post(postEnpoint, data).done(function(data) {
-          $this.find("#comment").val("");
-          controller.updateComments(data);
+        $.post(_self.postEnpoint, data)
+         .done(function(data) {
+            $this.find("#comment").val("");
+            controller.updateComments(data);
+         })
+         .fail(function($ajaxObj) {
+            var errors = $ajaxObj.responseJSON;
+
+            // Create an array with all the erros messages
+            var errorsMsgs = _.flatten(_.values(errors));
+            _self.renderErrors($this, errorsMsgs);
         });
       });
     },

@@ -26,7 +26,7 @@ class Comment(FlaskView):
             comment.put()
             post.add_comment(comment.id)
             return jsonify(comment)
-        return "form.errors"
+        return jsonify(form.errors), 400
 
     @login_required
     def delete(self, comment_id):
