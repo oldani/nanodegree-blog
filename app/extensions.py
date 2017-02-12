@@ -49,7 +49,7 @@ class Db:
         entity = datastore.Entity(key=key)
         entity.update(data)
         db.put(entity)
-        return entity.key.id, self.from_datastore(entity)
+        return entity.key.id
 
     # Updates and insert are almost the same
     update = put
