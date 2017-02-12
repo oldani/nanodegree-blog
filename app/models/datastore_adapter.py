@@ -10,40 +10,34 @@ class DataStoreAdapter(DBAdapter):
 
     def get_object(self, ObjectClass, pk):
         """ Retrieve an single Entity specified by a pk or id. """
-        entity = ObjectClass().get(pk)
-        entity = ObjectClass(**entity)
-        return entity
+        return ObjectClass.get(pk)
 
     def find_all_objects(self, ObjectClass, **kwargs):
         """ Retrieve all Entity matching  all the filters in kwargs. """
         # TODO:
         # The filters should be case sensitive
-        return ObjectClass().fetch()
+        for field, value in kwargs.items():
+            ObjectClass.add_query_filter(field, "=", value)
+        return ObjectClass.fetch()
 
     def find_first_object(self, ObjectClass, **kwargs):
-        """ Retrieve the first Entity matching the filters in kwargs or None. """
+        """ Retrieve the first Entity matching the filters in
+        kwargs or None. """
         # TODO:
         # The filters should be case sensitive
-        entity = ObjectClass()
-        for key, value in kwargs.items():
-            entity.query.add_filter(key, "=", value)
-        entity = entity.fetch(limit=1)
-        # Just return the Entity is the list is not empty and the
-        # first element is not None or Falsy else return None
-        entity = ObjectClass(**entity[0]) if entity and entity[0] else None
+        for field, value in kwargs.items():
+            ObjectClass.add_query_filter(field, "=", value)
+        entity = ObjectClass.fetch(limit=1)
         return entity
 
     def ifind_first_object(self, ObjectClass, **kwargs):
-        """ Retrieve the first Entity matching the filters in kwargs or None. """
+        """ Retrieve the first Entity matching the filters in
+         kwargs or None. """
         # TODO:
         # The filters should be case insensitive
-        entity = ObjectClass()
-        for key, value in kwargs.items():
-            entity.query.add_filter(key, "=", value)
-        entity = entity.fetch(limit=1)
-        # Just return the Entity is the list is not empty and the
-        # first element is not None or Falsy else return None
-        entity = ObjectClass(**entity[0]) if entity and entity[0] else None
+        for field, value in kwargs.items():
+            ObjectClass.add_query_filter(field, "=", value)
+        entity = ObjectClass.fetch(limit=1)
         return entity
 
     def add_object(self, ObjectClass, **kwargs):
@@ -54,14 +48,13 @@ class DataStoreAdapter(DBAdapter):
 
     def update_object(self, entity, **kwargs):
         """ Update an Entity with the fields specified in kwargs. """
-        entity.update(entity.get_id(), kwargs)
+        entity.update(**kwargs)
         return entity
 
     def delete_object(self, entity):
         """ Delete and Entity. """
-        entity.delete(entity.id)
-        return entity
+        return entity.delete(entity.id)
 
     def commit(self):
-        """ Should commit a create, update, all delete to the DataStore. """
+        """ Should commit a session connection to the DataStore. """
         pass
