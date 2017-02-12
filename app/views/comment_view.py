@@ -11,23 +11,21 @@ class Comment(FlaskView):
         pass
 
     def all(self, post_id):
-        comment = CommentModel()
-        comment.query.add_filter('post_id', '=', int(post_id))
-        comment.query.order = '-updated'
-        return jsonify(comment.fetch())
+        CommentModel.add_query_filter('post_id', '=', int(post_id))
+        CommentModel.query.order = '-updated'
+        return jsonify(CommentModel.fetch())
 
     @login_required
     def post(self, post_id):
         form = CommentForm()
         if form.validate_on_submit():
-            post = PostModel().get(post_id)
-            post = PostModel(**post)
+            post = PostModel.get(post_id)
             comment = CommentModel(user=current_user.username,
                                    post_id=int(post_id),
                                    **form.data)
             comment.put()
             post.add_comment(comment.id)
-            return jsonify(comment.data)
+            return jsonify(comment)
         return "form.errors"
 
     @login_required

@@ -9,8 +9,7 @@ class Post(FlaskView):
     """ Here will handle post creations, delete and update."""
 
     def get(self, entity_id):
-        post = PostModel()
-        post = post.get(entity_id)
+        post = PostModel.get(entity_id)
         comment_form = None
         if current_user.is_authenticated:
             comment_form = CommentForm()
@@ -34,11 +33,11 @@ class Post(FlaskView):
     def edit(self, entity_id):
         if int(entity_id) not in current_user.posts_list:
             abort(403)
-        post = PostModel()
-        entity = post.get(entity_id)
-        form = PostForm(**entity)
+        post = PostModel.get(entity_id)
+        form = PostForm(obj=post)
         if form.validate_on_submit():
-            post.update(entity_id, form.data)
+            form.populate_obj(post)
+            post.update()
             return redirect(url_for("Post:get", entity_id=entity_id))
         return render_template("post/post_form.html", form=form,
                                url="Post:edit", entity_id=entity_id)
