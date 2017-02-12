@@ -1,8 +1,9 @@
 from flask import Flask
+from flask.json import JSONEncoder
 from flask_user import UserManager
 from . import views
 from .extensions import db, mail, toolbar
-from .models import DataStoreAdapter, UserModel
+from .models import DataStoreAdapter, UserModel, BaseModel
 
 
 def create_app(config):
@@ -26,6 +27,7 @@ def register_extensions(app):
     # due to will create a circular import.
     db_adapter = DataStoreAdapter(db, UserModel)
     user_manager = UserManager(db_adapter, app)
+    app.json_encoder = CustomJsonEncoder
 
 
 def register_views(app):
@@ -33,3 +35,15 @@ def register_views(app):
     views.Main.register(app)
     views.Post.register(app)
     views.Comment.register(app)
+
+
+class CustomJsonEncoder(JSONEncoder):
+    """ Extend JSON Enconder, for encoding entity models."""
+
+    def default(self, obj):
+        try:
+            if isinstance(obj, BaseModel):
+                return obj.__dict__
+        except AttributeError:
+            pass
+        return super().default(obj)
