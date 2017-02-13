@@ -37,3 +37,13 @@ class Comment(FlaskView):
             CommentModel.delete(comment_id)
             return "", 204
         return "You most specify a Post ID", 400
+
+    @login_required
+    def put(self, comment_id):
+        form = CommentForm()
+        if form.validate_on_submit():
+            comment = CommentModel.get(comment_id)
+            form.populate_obj(comment)
+            comment.put()
+            return jsonify(comment), 201
+        return jsonify(form.errors), 400

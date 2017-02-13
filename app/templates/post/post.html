@@ -27,13 +27,20 @@
 {% block js_templates%}
   <script type="text/template" class="comments-template">
     <div class="card">
-      <div class="card-block">
+      <div class="card-block" data-id="<%= id %>">
         <h5 class="card-title"><%= user %></h5>
         <p class="card-text"><%= comment %></p>
         <% if (user == currentUser) { %>
-          <a href="#" class="card-link">Edit</a>
-          <a href="<%= deleteUrl %>" class="card-link delete-comment">Delete</a>
+          <a href="#" class="card-link edit-comment">Edit</a>
+          <a href="<%= endpointUrl %>" class="card-link delete-comment">Delete</a>
         <% } %>
+        <div class="edit-comment-container">
+          <textarea class="comment-input" rows=5><%= comment %></textarea>
+          <div>
+            <button type="button" class="btn btn-primary save-btn">Save</button>
+            <button type="button" class="btn btn-default cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
   </script>
@@ -54,6 +61,7 @@
     window.allCommentEndpoint = "{{url_for('Comment:all', post_id=post.id)}}";
     window.commentDeleteEndpoint = "{{url_for('Comment:delete', comment_id='')}}";
     {% if comment_form %}
+      window.csrfToken = "{{ comment_form.csrf_token.current_token}}";
       window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
       window.currentUser = "{{current_user.username}}";
     {% endif %}
