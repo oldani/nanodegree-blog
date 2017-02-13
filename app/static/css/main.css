@@ -5,3 +5,11 @@ body {
 .comments {
   display: none;
 }
+
+.edit-comment-container {
+  display: none;
+}
+
+.edit-comment-container .comment-input {
+  width: 90%;
+}

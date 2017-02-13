@@ -13,6 +13,5 @@ class Post(BaseModel):
 
     def delete_comment(self, comment_id):
         """ Delete a given comment id from commnet list. """
-        # self.comment_list.remove(comment_id)
-        # self.update()
-        pass
+        self.comment_list.remove(int(comment_id))
+        self.update()

@@ -8,34 +8,50 @@
       <p>{{post.body}}</p>
     </div>
   </div>
-  <div class="row justify-content-center">
-    <div class="col col-md-8">
-      <div class="jumbotron comment-form">
-        {% if comment_form %}
+  {% if comment_form %}
+    <div class="row justify-content-center">
+      <div class="col col-md-8">
+        <div class="jumbotron comment-form">
           {% from "macros/form.html" import form as macro_form %}
 
           {{ macro_form('Comment:post', form=comment_form, post_id=post.id) }}
-        {% endif %}
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
   <div class="row justify-content-center">
-    <div class="col col-md-6 comments">
-    </div>
+    <div class="col col-md-6 comments"></div>
   </div>
 {% endblock %}
 
 {% block js_templates%}
   <script type="text/template" class="comments-template">
     <div class="card">
-      <div class="card-block">
+      <div class="card-block" data-id="<%= id %>">
         <h5 class="card-title"><%= user %></h5>
         <p class="card-text"><%= comment %></p>
         <% if (user == currentUser) { %>
-          <a href="#" class="card-link">Edit</a>
-          <a href="<%= deleteUrl %>" class="card-link delete-comment">Delete</a>
+          <a href="#" class="card-link edit-comment">Edit</a>
+          <a href="<%= endpointUrl %>" class="card-link delete-comment">Delete</a>
         <% } %>
+        <div class="edit-comment-container">
+          <textarea class="comment-input" rows=5><%= comment %></textarea>
+          <div>
+            <button type="button" class="btn btn-primary save-btn">Save</button>
+            <button type="button" class="btn btn-default cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
+    </div>
+  </script>
+
+  <!-- Errors messages template -->
+  <script type="text/template" class="error-template">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Error:</strong><%= error %>
     </div>
   </script>
 {% endblock %}
@@ -45,6 +61,7 @@
     window.allCommentEndpoint = "{{url_for('Comment:all', post_id=post.id)}}";
     window.commentDeleteEndpoint = "{{url_for('Comment:delete', comment_id='')}}";
     {% if comment_form %}
+      window.csrfToken = "{{ comment_form.csrf_token.current_token}}";
       window.commentPostEnpoint = "{{url_for('Comment:post', post_id=post.id)}}";
       window.currentUser = "{{current_user.username}}";
     {% endif %}
