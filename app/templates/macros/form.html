@@ -12,7 +12,7 @@
         {% endcall %}
     {% endfor %}
     <button type="submit" class="btn btn-primary">Save</button>
-    {% if url != 'Comment:post' %}
+    {% if url != 'Comment:post' and url != 'Post:new' %}
       <a href="{{url_for('Post:get', entity_id=kwargs.entity_id)}}" class="btn btn-danger">Cancel</a>
     {% endif %}
   </form>
