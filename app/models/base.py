@@ -50,7 +50,7 @@ class BaseModel:
                 self.__setattr__(field, value)
         return self.put()
 
-    @staticmethod
+    @classmethod
     def set_query(cls):
         """ Set a query class attribute. """
         entity_kind = cls.get_kind(cls)
@@ -60,7 +60,7 @@ class BaseModel:
     def add_query_filter(cls, field, operator, value):
         """ Add given filters to a query. """
         if not hasattr(cls, 'query'):
-            cls.set_query(cls)
+            cls.set_query()
         cls.query.add_filter(field, operator, value)
         return cls
 
@@ -70,7 +70,7 @@ class BaseModel:
         Once the query is made del the attr. If entities were
         retrieve return a list a entitys objs. """
         if not hasattr(cls, 'query'):
-            cls.set_query(cls)
+            cls.set_query()
         entities = map(db.from_datastore, cls.query.fetch(**kwargs))
         entities = list(entities)
         delattr(cls, 'query')
