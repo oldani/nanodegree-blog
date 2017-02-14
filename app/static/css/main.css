@@ -17,3 +17,8 @@ body {
 #body {
   height: 500px;
 }
+
+.post-body {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
