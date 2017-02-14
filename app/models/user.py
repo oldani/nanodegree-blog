@@ -35,7 +35,7 @@ class User(BaseModel):
     def add_post(self, post_id):
         """ Add a post id to the user posts list or create it if not
             exits. """
-        if not hasattr(self, 'post_list'):
+        if not hasattr(self, 'posts_list'):
             self.posts_list = []
         self.posts_list.append(post_id)
         self.update()
