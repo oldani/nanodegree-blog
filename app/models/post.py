@@ -1,11 +1,13 @@
-from .base import BaseModel
+from datetime import datetime
 from flask_user import current_user
+from .base import BaseModel
 
 
 class Post(BaseModel):
 
     def __init__(self, **kwargs):
         # Add a comment list field
+        self.created = self.updated = datetime.now()
         self.comment_list = []
         super().__init__(**kwargs)
 
@@ -21,6 +23,11 @@ class Post(BaseModel):
         """ Delete a given comment id from commnet list. """
         self.comment_list.remove(int(comment_id))
         self.update()
+
+    def update(self, **kwargs):
+        """ Extend BaseModel method. """
+        self.updated = datetime.now()
+        super().update(**kwargs)
 
     @classmethod
     def delete(cls, entity_id):
