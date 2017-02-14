@@ -46,7 +46,13 @@ class Db:
 
         db = self.client
         key = db.key(kind, int(entity_id)) if entity_id else db.key(kind)
-        entity = datastore.Entity(key=key)
+
+        # Exlude body field from index, this is beacause
+        # strings longer that 1500 bytes can be indexed.
+        if 'body' in data:
+            entity = datastore.Entity(key=key, exclude_from_indexes=['body'])
+        else:
+            entity = datastore.Entity(key=key)
         entity.update(data)
         db.put(entity)
         return entity.key.id
@@ -59,7 +65,7 @@ class Db:
 
         db = self.client
         key = db.key(kind, int(entity_id))
-        db.delete(key)
+        return db.delete(key)
 
 
 # GClound DataStore wrapper
