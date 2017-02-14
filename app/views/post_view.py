@@ -41,3 +41,11 @@ class Post(FlaskView):
             return redirect(url_for("Post:get", entity_id=entity_id))
         return render_template("post/post_form.html", form=form,
                                url="Post:edit", entity_id=entity_id)
+
+    @login_required
+    @route("/delete/<entity_id>")
+    def delete(self, entity_id):
+        if int(entity_id) in current_user.posts_list:
+            PostModel.delete(entity_id)
+            return "Your post have been delete."
+        return "You do not have a Post with an ID {}".format(entity_id)

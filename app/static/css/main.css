@@ -13,3 +13,7 @@ body {
 .edit-comment-container .comment-input {
   width: 90%;
 }
+
+#body {
+  height: 500px;
+}
