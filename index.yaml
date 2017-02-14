@@ -5,3 +5,9 @@ indexes:
    - name: post_id
    - name: updated
      direction: desc
+
+ - kind: Post
+   properties:
+   - name: updated
+     direction: desc
+   - name: title
