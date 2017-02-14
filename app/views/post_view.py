@@ -10,6 +10,8 @@ class Post(FlaskView):
 
     def get(self, entity_id):
         post = PostModel.get(entity_id)
+        if not post:
+            return redirect(url_for('Main:index'))
         comment_form = None
         if current_user.is_authenticated:
             comment_form = CommentForm()
