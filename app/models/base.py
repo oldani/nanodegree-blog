@@ -83,3 +83,10 @@ class BaseModel:
     def delete(cls, entity_id):
         """ Delete a entity of a given id. """
         return cls.db.delete(cls.get_kind(cls), entity_id)
+
+    @classmethod
+    def delete_multi(cls, entities_id, kind=None):
+        """ Delete a  list of Entities from a given list of IDs. """
+        if kind:
+            return cls.db.delete_multi(kind, entities_id)
+        return cls.db.delete_multi(cls.get_kind(cls), entities_id)

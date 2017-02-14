@@ -67,6 +67,14 @@ class Db:
         key = db.key(kind, int(entity_id))
         return db.delete(key)
 
+    def delete_multi(self, kind, entities_id):
+        """ Delete multiples Entities from Datastore. """
+
+        db = self.client
+        entities_keys = [db.key(kind, int(entity_id))
+                         for entity_id in entities_id]
+        return db.delete_multi(entities_keys)
+
 
 # GClound DataStore wrapper
 db = Db()
