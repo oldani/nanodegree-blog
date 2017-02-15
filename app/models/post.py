@@ -40,3 +40,16 @@ class Post(BaseModel):
             current_user.put()
             return True
         return
+
+    def has_liked(self, user_id):
+        if hasattr(self, "users_liked") and user_id in self.users_liked:
+            return True
+        return
+
+    def add_like(self, user_id):
+        if not hasattr(self, "likes"):
+            self.likes = 0
+            self.users_liked = []
+        self.likes += 1
+        self.users_liked.append(user_id)
+        super().update()
