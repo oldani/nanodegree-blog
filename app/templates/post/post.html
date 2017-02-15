@@ -3,9 +3,17 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col col-md-8">
-      <h3>{{post.title}}</h3>
+      <div class="row justify-content-between">
+        <h3 class="col-xs-6">{{post.title}}</h3>
+        {% if post.id in current_user.posts_list %}
+          <div class="col-xs-6 ">
+            <a href="{{url_for('Post:edit', entity_id=post.id)}}">Edit</a>
+            <a href="{{url_for('Post:delete', entity_id=post.id)}}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
       <strong>{{post.user}}</strong>
-      <p>{{post.body}}</p>
+      <pre class="post-body">{{post.body}}</pre>
     </div>
   </div>
   {% if comment_form %}
@@ -66,5 +74,4 @@
       window.currentUser = "{{current_user.username}}";
     {% endif %}
   </script>
-  <script src="{{url_for('static', filename='js/comments.js')}}" ></script>
 {% endblock %}

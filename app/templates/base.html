@@ -31,6 +31,7 @@
                 {{current_user.username}}
               </a>
               <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{url_for('Post:new')}}">New Post</a>
                 <a class="dropdown-item" href="{{url_for('user.profile')}}">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{url_for('user.logout')}}">Logout</a>
@@ -42,6 +43,24 @@
     </nav>
   </header>
   <main class="container">
+    {# This block is to display flash messages generated in flask views #}
+    <div class="row">
+      {%- with messages = get_flashed_messages(with_categories=true) -%}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category=='error' %}
+              {% set category='danger' %}
+            {% endif %}
+              <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message|safe }}
+              </div>
+          {% endfor %}
+        {% endif %}
+      {%- endwith -%}
+      </div>
     {% block content %}
     {% endblock %}
   </main>
@@ -56,5 +75,6 @@
   {% block js_templates %}{% endblock %}
   <script src="{{url_for('static', filename='js/helpers.js')}}"></script>
   {% block scripts %}{% endblock %}
+  <script src="{{url_for('static', filename='js/app.js')}}" ></script>
 </body>
 </html>

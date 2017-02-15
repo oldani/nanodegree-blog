@@ -1,16 +1,19 @@
 {% from 'macros/form_field.html' import form_field %}
 
 {% macro form(url, form) %}
-    <form method="post" action="{% if kwargs %}
-                                    {{url_for(url, **kwargs)}}
-                                {% else %}
-                                    {{url_for(url)}}
-                                {% endif %}">
-        {{ form.csrf_token }}
-        {% for field in form if not field.current_token %}
-            {% call form_field(field) %}
-            {% endcall %}
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Post</button>
-    </form>
+  <form method="post" action="{% if kwargs %}
+                                  {{url_for(url, **kwargs)}}
+                              {% else %}
+                                  {{url_for(url)}}
+                              {% endif %}">
+    {{ form.csrf_token }}
+    {% for field in form if not field.current_token %}
+        {% call form_field(field) %}
+        {% endcall %}
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    {% if url != 'Comment:post' and url != 'Post:new' %}
+      <a href="{{url_for('Post:get', entity_id=kwargs.entity_id)}}" class="btn btn-danger">Cancel</a>
+    {% endif %}
+  </form>
 {% endmacro %}

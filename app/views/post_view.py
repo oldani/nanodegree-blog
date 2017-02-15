@@ -1,4 +1,10 @@
-from flask import render_template, redirect, url_for, abort
+from flask import (
+                    abort,
+                    flash,
+                    render_template,
+                    redirect,
+                    url_for
+                  )
 from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
 from ..models import PostModel
@@ -10,6 +16,8 @@ class Post(FlaskView):
 
     def get(self, entity_id):
         post = PostModel.get(entity_id)
+        if not post:
+            return redirect(url_for('Main:index'))
         comment_form = None
         if current_user.is_authenticated:
             comment_form = CommentForm()
@@ -41,3 +49,15 @@ class Post(FlaskView):
             return redirect(url_for("Post:get", entity_id=entity_id))
         return render_template("post/post_form.html", form=form,
                                url="Post:edit", entity_id=entity_id)
+
+    @login_required
+    @route("/delete/<entity_id>")
+    def delete(self, entity_id):
+        if hasattr(current_user, "posts_list"
+                   ) and int(entity_id) in current_user.posts_list:
+            PostModel.delete(entity_id)
+            flash("Your post have been delete.", "success")
+        else:
+            flash("You do not have a Post with an ID {}".format(
+                  entity_id), "error")
+        return redirect(url_for("Main:index"))

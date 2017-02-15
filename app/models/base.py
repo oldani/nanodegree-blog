@@ -50,7 +50,7 @@ class BaseModel:
                 self.__setattr__(field, value)
         return self.put()
 
-    @staticmethod
+    @classmethod
     def set_query(cls):
         """ Set a query class attribute. """
         entity_kind = cls.get_kind(cls)
@@ -60,7 +60,7 @@ class BaseModel:
     def add_query_filter(cls, field, operator, value):
         """ Add given filters to a query. """
         if not hasattr(cls, 'query'):
-            cls.set_query(cls)
+            cls.set_query()
         cls.query.add_filter(field, operator, value)
         return cls
 
@@ -70,7 +70,7 @@ class BaseModel:
         Once the query is made del the attr. If entities were
         retrieve return a list a entitys objs. """
         if not hasattr(cls, 'query'):
-            cls.set_query(cls)
+            cls.set_query()
         entities = map(db.from_datastore, cls.query.fetch(**kwargs))
         entities = list(entities)
         delattr(cls, 'query')
@@ -83,3 +83,10 @@ class BaseModel:
     def delete(cls, entity_id):
         """ Delete a entity of a given id. """
         return cls.db.delete(cls.get_kind(cls), entity_id)
+
+    @classmethod
+    def delete_multi(cls, entities_id, kind=None):
+        """ Delete a  list of Entities from a given list of IDs. """
+        if kind:
+            return cls.db.delete_multi(kind, entities_id)
+        return cls.db.delete_multi(cls.get_kind(cls), entities_id)

@@ -9,5 +9,7 @@ class Main(FlaskView):
     route_base = "/"
 
     def index(self):
+        PostModel.set_query()
+        PostModel.query.order = ['-updated', 'title']
         posts = PostModel.fetch()
         return render_template("index.html", posts=posts)

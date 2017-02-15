@@ -3,7 +3,7 @@
     init: function(){
       var url = window.allCommentEndpoint || '';
       return $.getJSON(url).done(function(data) {
-        this.comments = data;
+        this.comments = data || [];
       }.bind(this));
     },
     comments: []

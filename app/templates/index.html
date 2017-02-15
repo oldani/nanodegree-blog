@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% if posts %}
     {% for post in posts %}
       <div class="row justify-content-center">
         <div class="col col-md-8">
@@ -9,7 +10,7 @@
               {{post.title}}
             </a>
           </h3>
-          <p>{{post.body|truncate(1000, killwords=True)}}</p>
+          <pre class="post-body">{{post.body|truncate(1000, killwords=True)}}</pre>
           {% if post.body|length > 1000 %}
             <a href="{{url_for('Post:get', entity_id=post.id)}}">
               Continue reading..
@@ -19,4 +20,5 @@
         </div>
       </div>
     {% endfor %}
+  {% endif %}
 {% endblock %}
