@@ -6,7 +6,8 @@ from .base import BaseModel
 class Post(BaseModel):
 
     def __init__(self, **kwargs):
-        # Add a comment list field
+        # Add a comment list field and datetime fields
+        # by default
         self.created = self.updated = datetime.now()
         self.comment_list = []
         super().__init__(**kwargs)
@@ -25,17 +26,21 @@ class Post(BaseModel):
         self.update()
 
     def update(self, **kwargs):
-        """ Extend BaseModel method. """
+        """ Update the updated field, before calling parent method. """
         self.updated = datetime.now()
         super().update(**kwargs)
 
     @classmethod
     def delete(cls, entity_id):
+        """ Given a post id, delete it and all the corelated data. """
+        # Needs to retrieve the post to have
+        # acces to the comments related with it.
         post = cls.get(entity_id)
         if post:
             if post.comment_list:
                 cls.delete_multi(post.comment_list, kind='Comment')
             super().delete(entity_id)
+            # Remove the post id from the list off post of a user
             current_user.posts_list.remove(int(entity_id))
             current_user.put()
             return True

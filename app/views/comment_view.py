@@ -1,8 +1,8 @@
 from flask import jsonify, request
 from flask_classy import FlaskView
 from flask_user import current_user, login_required
-from ..models import CommentModel, PostModel
 from ..forms import CommentForm
+from ..models import CommentModel, PostModel
 
 
 class Comment(FlaskView):
@@ -11,6 +11,7 @@ class Comment(FlaskView):
         pass
 
     def all(self, post_id):
+        """ Retrive all the comments of a given post. """
         CommentModel.add_query_filter('post_id', '=', int(post_id))
         CommentModel.query.order = '-updated'
         return jsonify(CommentModel.fetch())

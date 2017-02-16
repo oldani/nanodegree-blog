@@ -4,5 +4,6 @@ from wtforms import StringField, TextAreaField
 
 
 class PostForm(FlaskForm):
+    """ Form for posts. """
     title = StringField('title', validators=[InputRequired()])
     body = TextAreaField('body', validators=[InputRequired()])

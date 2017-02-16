@@ -7,8 +7,8 @@ from flask import (
                   )
 from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
-from ..models import PostModel
 from ..forms import PostForm, CommentForm
+from ..models import PostModel
 
 
 def user_own_post(post_id):
@@ -20,9 +20,10 @@ def user_own_post(post_id):
 
 
 class Post(FlaskView):
-    """ Here will handle post creations, delete and update."""
 
     def get(self, entity_id):
+        """ Retrieve a post, if not exits redirect to home,
+            and if authenticated render a comment form. """
         post = PostModel.get(entity_id)
         if not post:
             return redirect(url_for('Main:index'))
@@ -47,6 +48,8 @@ class Post(FlaskView):
     @login_required
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
+        """ Handle editing a post, if the user is not the owner,
+            throw a 403 error. """
         if int(entity_id) not in current_user.posts_list:
             abort(403)
         post = PostModel.get(entity_id)

@@ -1,3 +1,5 @@
+// Save templates to global vars.
+
 var commentsTemplate = _.template(
   $(".comments-template").html() || ''
 );

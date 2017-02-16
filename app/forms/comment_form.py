@@ -4,6 +4,7 @@ from wtforms.validators import InputRequired, Length
 
 
 class CommentForm(FlaskForm):
+    """ Form for comments. """
     comment = TextAreaField('Comment:', validators=[InputRequired(),
                                                     Length(min=6,
                                                     message="Your comment should be as min\

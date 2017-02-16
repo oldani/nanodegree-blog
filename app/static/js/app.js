@@ -1,6 +1,8 @@
 (function() {
   var model = {
-    init: function(){
+    init: function() {
+      // Retrive all the comments and set to the comments
+      // attr
       var url = window.allCommentEndpoint || '';
       return $.getJSON(url).done(function(data) {
         this.comments = data || [];
@@ -11,6 +13,7 @@
 
   var controller = {
     init: function() {
+      // Initialize all the views
       model.init().then(function() {
         commentsView.init();
       });
@@ -20,6 +23,7 @@
       return model.comments;
     },
     updateComments: function(newComment, update=false) {
+      // Use for adding new comments or update a existing one.
       if (update) {
         model.comments = _.map(model.comments, function(comment) {
           if (comment.id == newComment.id) {
@@ -29,7 +33,6 @@
         });
       } else {
         model.comments = [newComment].concat(model.comments);
-
       };
 
       commentsView.reRender();
@@ -51,9 +54,10 @@
       this.commentsTemplate = commentsTemplate;
 
       this.comments = controller.getComments();
-
       this.render();
 
+      // Add event listeners to all the comments
+      // and pass it to the respective handler.
       this.$commentsContainer.on('click', '.delete-comment', function(e) {
         e.preventDefault();
         this.deleteComment(e.target.href);
@@ -73,7 +77,6 @@
 
         var comment = this.commentsTemplate(item);
         this.$commentsContainer.append(comment);
-
       }.bind(this));
 
       this.$commentsContainer.fadeIn("slow");
@@ -85,6 +88,7 @@
     },
     deleteComment: function(targetUrl) {
       var postId = _.last(window.commentPostEnpoint.split('/'));
+
       $.ajax(targetUrl, {
         method: "DELETE",
         data: {'post_id': postId}
@@ -94,7 +98,6 @@
 
         controller.deleteComment(commentId);
         this.reRender();
-
       }.bind(this));
     },
     editComment: function($comment) {
@@ -105,6 +108,7 @@
       $commentText.fadeOut();
       $commentInputContainer.fadeIn();
 
+      // Event listeners for saving or cancel an edit comment.
       $comment.on('click', '.cancel-btn', function(e) {
         e.preventDefault();
         $commentText.fadeIn();
@@ -119,6 +123,7 @@
       }.bind(this));
     },
     saveComment: function(comment, commentId) {
+      // Save a comment to the backend
       var commentObj = _.findWhere(this.comments, {id:commentId});
 
       commentObj.csrf_token = this.csrfToken;
@@ -130,7 +135,8 @@
       .done(function(data) {
         controller.updateComments(data, update=true);
       })
-      .fail(function($ajaxObj){
+      .fail(function($ajaxObj) {
+        // If something fail in the backend output to the console.
         console.error($ajaxObj);
       });
     },
@@ -171,7 +177,7 @@
          .fail(function($ajaxObj) {
             var errors = $ajaxObj.responseJSON;
 
-            // Create an array with all the erros messages
+            // Create an array with all the errors messages
             var errorsMsgs = _.flatten(_.values(errors));
             _self.renderErrors($this, errorsMsgs);
         });
