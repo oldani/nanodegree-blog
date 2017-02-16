@@ -26,10 +26,7 @@ class BaseModel:
             # If find one, create a Intance of the class
             # with the data recivied, since what's
             # return is a dict.
-            entity = cls()
-            for field_name, value in result.items():
-                entity.__setattr__(field_name, value)
-            return entity
+            return cls(**result)
         return None
 
     @classmethod
