@@ -13,10 +13,7 @@ class Post(BaseModel):
         super().__init__(**kwargs)
 
     def add_comment(self, comment_id):
-        """ Append a comment id to a comment_list field or
-        create it if it is the firt one. """
-        if not hasattr(self, 'comment_list'):
-            self.comment_list = []
+        """ Append a comment id to a comment_list field. """
         self.comment_list.append(comment_id)
         self.update()
 
@@ -47,11 +44,13 @@ class Post(BaseModel):
         return
 
     def has_liked(self, user_id):
+        """ Check if a given user has already like a post. """
         if hasattr(self, "users_liked") and user_id in self.users_liked:
             return True
         return
 
     def add_like(self, user_id):
+        """ Add a like to a post. """
         if not hasattr(self, "likes"):
             self.likes = 0
             self.users_liked = []

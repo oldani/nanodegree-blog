@@ -82,5 +82,4 @@ class Post(FlaskView):
             post.add_like(current_user.id)
         else:
             flash("You can only like a post once.", "error")
-
         return redirect(url_for("Post:get", entity_id=entity_id))
