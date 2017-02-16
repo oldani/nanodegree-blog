@@ -23,10 +23,10 @@ class BaseModel:
         entity_kind = cls.get_kind(cls)
         result = cls.db.get(entity_kind, entity_id)
         if result:
-            entity = cls()
-            for field_name, value in result.items():
-                entity.__setattr__(field_name, value)
-            return entity
+            # If find one, create a Intance of the class
+            # with the data recivied, since what's
+            # return is a dict.
+            return cls(**result)
         return None
 
     @classmethod
@@ -52,7 +52,7 @@ class BaseModel:
 
     @classmethod
     def set_query(cls):
-        """ Set a query class attribute. """
+        """ Set a query obj as class attribute. """
         entity_kind = cls.get_kind(cls)
         cls.query = cls.db.client.query(kind=entity_kind)
 

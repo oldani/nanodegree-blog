@@ -1,3 +1,4 @@
+{# General html to render form fields #}
 {% macro form_field(field) %}
   <div class="form-group{{ 'has-error has-feedback' if field.errors }}">
     {{ field.label(class='col-sm-3 control-label') }}

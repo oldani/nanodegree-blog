@@ -7,14 +7,23 @@ from flask import (
                   )
 from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
-from ..models import PostModel
 from ..forms import PostForm, CommentForm
+from ..models import PostModel
+
+
+def user_own_post(post_id):
+    """ Check if a user is the owner of a post. """
+    if hasattr(current_user, 'posts_list'
+               ) and int(post_id) in current_user.posts_list:
+        return True
+    return
 
 
 class Post(FlaskView):
-    """ Here will handle post creations, delete and update."""
 
     def get(self, entity_id):
+        """ Retrieve a post, if not exits redirect to home,
+            and if authenticated render a comment form. """
         post = PostModel.get(entity_id)
         if not post:
             return redirect(url_for('Main:index'))
@@ -39,6 +48,8 @@ class Post(FlaskView):
     @login_required
     @route("/edit/<entity_id>", methods=["GET", "POST"])
     def edit(self, entity_id):
+        """ Handle editing a post, if the user is not the owner,
+            throw a 403 error. """
         if int(entity_id) not in current_user.posts_list:
             abort(403)
         post = PostModel.get(entity_id)
@@ -53,11 +64,22 @@ class Post(FlaskView):
     @login_required
     @route("/delete/<entity_id>")
     def delete(self, entity_id):
-        if hasattr(current_user, "posts_list"
-                   ) and int(entity_id) in current_user.posts_list:
+        if user_own_post(entity_id):
             PostModel.delete(entity_id)
             flash("Your post have been delete.", "success")
         else:
             flash("You do not have a Post with an ID {}".format(
                   entity_id), "error")
         return redirect(url_for("Main:index"))
+
+    @login_required
+    def likes(self, entity_id):
+        if user_own_post(entity_id):
+            flash("You can't like your own post.", "error")
+
+        post = PostModel.get(entity_id)
+        if not post.has_liked(current_user.id):
+            post.add_like(current_user.id)
+        else:
+            flash("You can only like a post once.", "error")
+        return redirect(url_for("Post:get", entity_id=entity_id))

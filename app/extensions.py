@@ -11,6 +11,7 @@ class Db:
         pass
 
     def init_app(self, app):
+        """ Pass the app obj to the class. """
         self.client = datastore.Client(app.config["PROJECT_ID"])
 
     def from_datastore(self, entity):

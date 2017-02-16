@@ -1,5 +1,6 @@
 {% from 'macros/form_field.html' import form_field %}
 
+{# General html to render all the forms. #}
 {% macro form(url, form) %}
   <form method="post" action="{% if kwargs %}
                                   {{url_for(url, **kwargs)}}
