@@ -22,3 +22,7 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+.post-likes {
+  margin-bottom: 20px;
+}
