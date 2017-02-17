@@ -74,12 +74,12 @@ class Post(FlaskView):
 
     @login_required
     def likes(self, entity_id):
-        if user_own_post(entity_id):
-            flash("You can't like your own post.", "error")
-
-        post = PostModel.get(entity_id)
-        if not post.has_liked(current_user.id):
-            post.add_like(current_user.id)
+        if not user_own_post(entity_id):
+            post = PostModel.get(entity_id)
+            if not post.has_liked(current_user.id):
+                post.add_like(current_user.id)
+            else:
+                flash("You can only like a post once.", "error")
         else:
-            flash("You can only like a post once.", "error")
+            flash("You can't like your own post.", "error")
         return redirect(url_for("Post:get", entity_id=entity_id))
