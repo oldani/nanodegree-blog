@@ -76,7 +76,7 @@ class BaseModel:
         delattr(cls, 'query')
         if entities:
             result = [cls(**entity) for entity in entities]
-            return result
+            return result if len(result) > 1 else result[0]
         return None
 
     @classmethod
