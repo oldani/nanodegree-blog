@@ -9,14 +9,7 @@ from flask_classy import FlaskView, route
 from flask_user import login_required, current_user
 from ..forms import PostForm, CommentForm
 from ..models import PostModel
-
-
-def user_own_post(post_id):
-    """ Check if a user is the owner of a post. """
-    if hasattr(current_user, 'posts_list'
-               ) and int(post_id) in current_user.posts_list:
-        return True
-    return
+from ..helpers import user_own_post
 
 
 class Post(FlaskView):
@@ -50,9 +43,9 @@ class Post(FlaskView):
     def edit(self, entity_id):
         """ Handle editing a post, if the user is not the owner,
             throw a 403 error. """
-        if int(entity_id) not in current_user.posts_list:
-            abort(403)
         post = PostModel.get(entity_id)
+        if post and not user_own_post(entity_id):
+            abort(403)
         form = PostForm(obj=post)
         if form.validate_on_submit():
             form.populate_obj(post)
@@ -64,8 +57,7 @@ class Post(FlaskView):
     @login_required
     @route("/delete/<entity_id>")
     def delete(self, entity_id):
-        if user_own_post(entity_id):
-            PostModel.delete(entity_id)
+        if PostModel.delete(entity_id):
             flash("Your post have been delete.", "success")
         else:
             flash("You do not have a Post with an ID {}".format(
@@ -74,8 +66,8 @@ class Post(FlaskView):
 
     @login_required
     def likes(self, entity_id):
-        if not user_own_post(entity_id):
-            post = PostModel.get(entity_id)
+        post = PostModel.get(entity_id)
+        if post and not user_own_post(entity_id):
             if not post.has_liked(current_user.id):
                 post.add_like(current_user.id)
             else:

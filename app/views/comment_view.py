@@ -19,8 +19,8 @@ class Comment(FlaskView):
     @login_required
     def post(self, post_id):
         form = CommentForm()
-        if form.validate_on_submit():
-            post = PostModel.get(post_id)
+        post = PostModel.get(post_id)
+        if form.validate_on_submit() and post:
             comment = CommentModel(user=current_user.username,
                                    post_id=int(post_id),
                                    **form.data)
@@ -33,8 +33,11 @@ class Comment(FlaskView):
     def delete(self, comment_id):
         post_id = request.form.get('post_id')
         if post_id:
-            post = PostModel.get(post_id)
-            post.delete_comment(comment_id)
+            try:
+                post = PostModel.get(post_id)
+                post.delete_comment(comment_id)
+            except AttributeError:
+                return "You most specify a valid Post ID", 400
             CommentModel.delete(comment_id)
             return "", 204
         return "You most specify a Post ID", 400
@@ -42,8 +45,8 @@ class Comment(FlaskView):
     @login_required
     def put(self, comment_id):
         form = CommentForm()
-        if form.validate_on_submit():
-            comment = CommentModel.get(comment_id)
+        comment = CommentModel.get(comment_id)
+        if form.validate_on_submit() and comment:
             form.populate_obj(comment)
             comment.put()
             return jsonify(comment), 201

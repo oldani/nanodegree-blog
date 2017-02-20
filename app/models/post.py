@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_user import current_user
 from .base import BaseModel
+from ..helpers import user_own_post
 
 
 class Post(BaseModel):
@@ -33,7 +34,7 @@ class Post(BaseModel):
         # Needs to retrieve the post to have
         # acces to the comments related with it.
         post = cls.get(entity_id)
-        if post:
+        if post and user_own_post(entity_id):
             if post.comment_list:
                 cls.delete_multi(post.comment_list, kind='Comment')
             super().delete(entity_id)
